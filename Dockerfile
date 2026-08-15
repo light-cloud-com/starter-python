@@ -9,4 +9,6 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Cloud Run (and most container platforms) inject the port to bind as $PORT;
+# binding a hardcoded port fails the platform health check when they differ.
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"]
